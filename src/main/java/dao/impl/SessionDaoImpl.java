@@ -43,6 +43,9 @@ public class SessionDaoImpl implements SessionDao {
     public void update(Session session) {
         SqlSession sqlSession = SessionFactory.getSession();
         sqlSession.update(namespace + ".update", session);
+        if (session.getClients() != null) {
+            sqlSession.update(namespace + ".updateJuncion", session);
+        }
         sqlSession.commit();
         sqlSession.close();
     }

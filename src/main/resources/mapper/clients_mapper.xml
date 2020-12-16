@@ -4,37 +4,37 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="clients_mapper">
     <select id="getById" resultMap="clients_map">
-        SELECT Sessions.id as s_id, Clients.id as c_id, start, port, isActive, ip, host,
+        SELECT Sessions.sessionId as sessionId, Clients.clientId as clientId, start, port, isActive, ip, host,
         sessionToken, clientToken, login, passwordHash
         FROM Clients
         LEFT JOIN SessionClients
-        ON SessionClients.clientId = Clients.id
+        ON SessionClients.clientId = Clients.clientId
         LEFT JOIN Sessions
-        ON SessionClients.sessionId = Sessions.id
-        WHERE Clients.id=#{id}
+        ON SessionClients.sessionId = Sessions.sessionId
+        WHERE Clients.clientId=#{id}
     </select>
     <select id="get" resultMap="clients_map">
-        SELECT Sessions.id as s_id, Clients.id as c_id, start, port, isActive, ip, host,
+        SELECT Sessions.sessionId as sessionId, Clients.clientId as clientId, start, port, isActive, ip, host,
         sessionToken, clientToken, login, passwordHash
         FROM Clients
         LEFT JOIN SessionClients
-        ON SessionClients.clientId = Clients.id
+        ON SessionClients.clientId = Clients.clientId
         LEFT JOIN Sessions
-        ON SessionClients.sessionId = Sessions.id
+        ON SessionClients.sessionId = Sessions.sessionId
     </select>
     <delete id="deleteById">
-        DELETE FROM Clients WHERE Clients.id=#{id}
+        DELETE FROM Clients WHERE Clients.clientId=#{id}
     </delete>
     <delete id="deleteFromJunctionById">
         DELETE FROM SessionClients WHERE SessionClients.clientId=#{id}
     </delete>
     <insert id="create">
-        INSERT INTO Clients(id, clientToken, login, passwordHash)
+        INSERT INTO Clients(clientId, clientToken, login, passwordHash)
         VALUES(#{id}, #{clientToken}, #{login}, #{password})
     </insert>
     <insert id="bind">
         INSERT INTO SessionClients(clientId, sessionId) VALUES
-        <foreach collection="sessionList" item="item" open="(" separator="," close=")">
+        <foreach collection="sessionList" item="item" open="(" separator="),(" close=")">
             #{id},
             #{item.id}
         </foreach>
@@ -44,14 +44,30 @@
         clientToken=#{clientToken},
         login=#{login},
         passwordHash=#{password}
-        WHERE id=#{id}
+        WHERE clientId=#{id}
+    </update>
+    <update id="updateJuncion">
+        UPDATE SessionClients SET
+        <foreach collection="sessionList" item="item" open="" separator="," close="">
+            clientId = #{id},
+            sessionId = #{item.id}
+        </foreach>
+        WHERE clientId=#{id}
     </update>
 
     <resultMap id="clients_map" type="model.Client" autoMapping="false">
-        <id property="id" column="c_id"/>
+        <id property="id" column="clientId"/>
         <result property="clientToken" column="clientToken"/>
         <result property="login" column="login"/>
         <result property="password" column="passwordHash"/>
-        <collection property="sessionList" ofType="model.Session"/>
+        <collection property="sessionList" ofType="model.Session">
+            <id property="id" column="sessionId"/>
+            <result property="start" column="start"/>
+            <result property="port" column="port"/>
+            <result property="isActive" column="isActive"/>
+            <result property="ip" column="ip"/>
+            <result property="host" column="host"/>
+            <result property="sessionToken" column="sessionToken"/>
+        </collection>
     </resultMap>
 </mapper>
