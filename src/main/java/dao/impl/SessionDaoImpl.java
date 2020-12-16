@@ -50,11 +50,12 @@ public class SessionDaoImpl implements SessionDao {
     @Override
     public void delete(int id) {
         SqlSession sqlSession = SessionFactory.getSession();
+        sqlSession.delete(namespace + ".deleteFromJunctionById", id);
         sqlSession.delete(namespace + ".deleteById", id);
         sqlSession.commit();
         sqlSession.close();
     }
-    public int getMax() {
+    public int getLastSessionId() {
         SqlSession sqlSession = SessionFactory.getSession();
         List<AbstractModel> values = sqlSession.selectList(namespace + ".get");
         int id = 0;

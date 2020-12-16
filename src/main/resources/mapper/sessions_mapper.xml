@@ -23,10 +23,10 @@
         ON SessionClients.clientId = Clients.id
     </select>
     <delete id="deleteById">
-        DELETE FROM Sessions WHERE id=#{id}
+        DELETE FROM Sessions WHERE Sessions.id=#{id}
     </delete>
     <delete id="deleteFromJunctionById">
-        DELETE FROM SessionClients WHERE sessionId=#{id}
+        DELETE FROM SessionClients WHERE SessionClients.sessionId=#{id}
     </delete>
     <insert id="create">
         INSERT INTO Sessions(id, start, port, isActive, ip, host, sessionToken)
@@ -40,12 +40,12 @@
             </foreach>
     </insert>
     <update id="update">
-        UPDATE Clients SET
-        start=#{start}
-        port=#{port}
-        isActive=#{isActive}
-        ip=#{ip}
-        host=#{host}
+        UPDATE Sessions SET
+        port=#{port},
+        isActive=#{isActive},
+        ip=#{ip},
+        host=#{host},
+        start=#{start},
         sessionToken=#{sessionToken}
         WHERE id=#{id}
     </update>

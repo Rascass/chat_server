@@ -23,10 +23,10 @@
         ON SessionClients.sessionId = Sessions.id
     </select>
     <delete id="deleteById">
-        DELETE FROM Clients WHERE id=#{id}
+        DELETE FROM Clients WHERE Clients.id=#{id}
     </delete>
     <delete id="deleteFromJunctionById">
-        DELETE FROM SessionClients WHERE clientId=#{id}
+        DELETE FROM SessionClients WHERE SessionClients.clientId=#{id}
     </delete>
     <insert id="create">
         INSERT INTO Clients(id, clientToken, login, passwordHash)
@@ -41,9 +41,9 @@
     </insert>
     <update id="update">
         UPDATE Clients SET
-        clientToken=#{clientToken}
-        login=#{login}
-        passwordHash=#{passwordHash}
+        clientToken=#{clientToken},
+        login=#{login},
+        passwordHash=#{password}
         WHERE id=#{id}
     </update>
 

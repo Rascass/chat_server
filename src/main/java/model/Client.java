@@ -10,7 +10,7 @@ public class Client extends AbstractModel {
 
     private int clientToken;
     private String login;
-    private String password;
+    private int password;
     private List<Session> sessionList;
     private static int counter;
 
@@ -20,7 +20,7 @@ public class Client extends AbstractModel {
     public Client(int clientToken, String login, String password, List<Session> sessionList) {
         this.clientToken = clientToken;
         this.login = login;
-        this.password = password;
+        this.setPassword(password);
         this.setSessionList(sessionList);
         this.setId(++this.counter);
     }
@@ -54,7 +54,7 @@ public class Client extends AbstractModel {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password = Objects.hash(password);
     }
 
     public List<Session> getSessionList() {

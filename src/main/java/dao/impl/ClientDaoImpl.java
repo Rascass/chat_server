@@ -49,11 +49,12 @@ public class ClientDaoImpl implements ClientDao {
     @Override
     public void delete(int id) {
         SqlSession sqlSession = SessionFactory.getSession();
+        sqlSession.delete(namespace + ".deleteFromJunctionById", id);
         sqlSession.delete(namespace + ".deleteById", id);
         sqlSession.commit();
         sqlSession.close();
     }
-    public int getMax() {
+    public int getLastClient() {
         SqlSession sqlSession = SessionFactory.getSession();
         List<AbstractModel> values = sqlSession.selectList(namespace + ".get");
         int id = 0;
