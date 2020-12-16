@@ -96,18 +96,6 @@ public class Session extends AbstractModel {
     }
 
     @Override
-    public String toString() {
-        return "Session{" +
-                "start=" + start +
-                ", port=" + port +
-                ", isActive=" + isActive +
-                ", ip='" + ip + '\'' +
-                ", host='" + host + '\'' +
-                ", sessionToken=" + sessionToken +
-                '}';
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -124,5 +112,18 @@ public class Session extends AbstractModel {
     @Override
     public int hashCode() {
         return Objects.hash(start, port, isActive, ip, host, sessionToken, clients);
+    }
+
+    @Override
+    public String toString() {
+        return "Session{" +
+                "start=" + start +
+                ", port=" + port +
+                ", isActive=" + isActive +
+                ", ip='" + ip + '\'' +
+                ", host='" + host + '\'' +
+                ", sessionToken=" + sessionToken +
+                ", clients=" + clients +
+                '}';
     }
 }
