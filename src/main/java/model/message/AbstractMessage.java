@@ -1,4 +1,4 @@
 package model.message;
 
-public class AbstractMessage {
+public interface AbstractMessage {
 }

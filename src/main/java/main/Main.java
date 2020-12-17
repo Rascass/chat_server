@@ -11,9 +11,8 @@ import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) {
-        Client client = new Client(123, "sdf", "12332", null);
-        client.connectToServer("127.0.0.1", 8000);
-        client.logIn();
+        Client client = new Client(0, "sdf", "12332", null);
+        client.logIn("127.0.0.1", 8000);
 
         /*
         ClientDaoImpl clientDaoImpl = new ClientDaoImpl();

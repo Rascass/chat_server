@@ -28,17 +28,30 @@ public class Server {
                     String response = "";
                     Client currentClient;
                     ClientService clientService = new ClientService();
+                    boolean notFind = true;
+                    int token = 1 + (int) (Math.random() * 100000);
+
                     for (Client c: clientService.getAllClients()) {
                         if (request.contains(c.getLogin()) && request.contains(c.getPassword() + "")) {
-                            response = "true";
                             currentClient = c;
-                        } else {
-                            response = "false";
+                            currentClient.setClientToken(token);
+                            notFind = false;
+                            break;
                         }
                     }
 
+                    if (notFind) {
+                        int from = request.indexOf("\":\"") + 3;
+                        int to = request.lastIndexOf("\",\"");
+                        String login = request.substring(from, to);
+
+                        from = request.lastIndexOf(":") + 1;
+                        to = request.lastIndexOf("}");
+                        String password = request.substring(from, to);
+
+                        clientService.createClient(new Client(token, login, password, null));
+                    }
                     phone.writeLine(response);
-                    System.out.println("Response: " + response);
                 }).start();
             }
         } catch (IOException e) {

@@ -66,11 +66,8 @@ public class Client extends AbstractModel {
         this.sessionList = sessionList;
     }
 
-    public void connectToServer(String ip, int port) {
+    public boolean logIn(String ip, int port) {
         this.phone = new Phone(ip, port);
-    }
-
-    public boolean logIn() {
         String request = new LogInMessage(login, password).toString();
         phone.writeLine(request);
         return phone.readLine().equals("true");
