@@ -29,4 +29,8 @@ public class ClientService {
     public void updateClient(Client client) {
         clientDao.update(client);
     }
+
+    public int getLastClientId() {
+        return clientDao.getLastClientId();
+    }
 }

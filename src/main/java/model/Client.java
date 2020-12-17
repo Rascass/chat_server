@@ -1,7 +1,8 @@
 package model;
 
+import constant.ServerConstant;
 import dao.AbstractModel;
-import dao.impl.ClientDaoImpl;
+import model.message.LogInMessage;
 
 import java.util.List;
 import java.util.Objects;
@@ -13,6 +14,7 @@ public class Client extends AbstractModel {
     private int password;
     private List<Session> sessionList;
     private static int counter;
+    private SocketConnector socketConnector;
 
     public Client() {
     }
@@ -63,6 +65,12 @@ public class Client extends AbstractModel {
 
     public void setSessionList(List<Session> sessionList) {
         this.sessionList = sessionList;
+    }
+
+    public void logIn() {
+        this.socketConnector = new SocketConnector(ServerConstant.IP, ServerConstant.PORT);
+        String request = new LogInMessage(login, password).toString();
+        socketConnector.writeLine(request);
     }
 
     @Override

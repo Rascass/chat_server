@@ -11,4 +11,5 @@ public interface SessionDao {
     List<Session> get();
     void update(Session session);
     void delete(int id);
+    int getLastSessionId();
 }

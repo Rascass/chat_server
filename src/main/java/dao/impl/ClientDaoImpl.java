@@ -57,7 +57,7 @@ public class ClientDaoImpl implements ClientDao {
         sqlSession.commit();
         sqlSession.close();
     }
-    public int getLastClient() {
+    public int getLastClientId() {
         SqlSession sqlSession = SessionFactory.getSession();
         List<AbstractModel> values = sqlSession.selectList(namespace + ".get");
         int id = 0;

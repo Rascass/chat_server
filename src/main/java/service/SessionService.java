@@ -28,4 +28,8 @@ public class SessionService {
     public void updateSession(Session session) {
         sessionDao.update(session);
     }
+
+    public int getLastSessionId() {
+        return sessionDao.getLastSessionId();
+    }
 }
