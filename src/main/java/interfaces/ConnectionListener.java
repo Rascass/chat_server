@@ -1,4 +1,6 @@
-package model;
+package interfaces;
+
+import model.Connection;
 
 public interface ConnectionListener {
     void onConnectionReady(Connection connection);

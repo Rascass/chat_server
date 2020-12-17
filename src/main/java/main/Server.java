@@ -3,9 +3,11 @@ package main;
 
 
 
+import constant.ServerConstant;
 import model.*;
 import service.ClientService;
 import service.SessionService;
+import util.LogInParser;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -18,63 +20,63 @@ public class Server {
 
     public static void main(String[] args) {
 
-        try (ServerSocket serverSocket = new ServerSocket(8000)) {
-            System.out.println("Server started");
-
+        try (ServerSocket serverSocket = new ServerSocket(ServerConstant.PORT);
+             Phone phone = new Phone(serverSocket)) {
             while (true) {
-                Phone phone = new Phone(serverSocket);
                 new Thread(()->{
-                    String request = phone.readLine();
-                    System.out.println("Request: " + request);
-                    String response = "";
-
-                    Client currentClient;
-
-                    ClientService clientService = new ClientService();
-                    SessionService sessionService = new SessionService();
-
-                    boolean notFind = true;
-                    int token = 1 + (int) (Math.random() * 100000);
-                    List<Client> clients = new ArrayList<>();
-                    Session session = new Session(new Date(), 8000, true, "127.0.0.1",
-                            "127.0.0.1", token, clients);
-
-
-                    for (Client c: clientService.getAllClients()) {
-                        if (request.contains(c.getLogin()) && request.contains(c.getPassword() + "")) {
-                            currentClient = c;
-                            currentClient.setClientToken(token);
-                            clients.add(currentClient);
-                            token = 1 + (int) (Math.random() * 100000);
-
-                            sessionService.createSession(session);
-                            clientService.updateClient(currentClient);
-                            notFind = false;
-                            break;
-                        }
-                    }
-
-                    if (notFind) {
-                        int from = request.indexOf("\":\"") + 3;
-                        int to = request.lastIndexOf("\",\"");
-                        String login = request.substring(from, to);
-
-                        from = request.lastIndexOf(":") + 1;
-                        to = request.lastIndexOf("}");
-                        String password = request.substring(from, to);
-
-                        currentClient = new Client(token, login, password, null);
-                        clients.add(currentClient);
-                        clientService.createClient(currentClient);
-                        sessionService.createSession(session);
-                    }
-                    phone.writeLine(response);
+                    Client currentClient = findClient(phone.readLine());
+                    Session session = createSession("", currentClient);
                 }).start();
             }
         } catch (IOException e) {
             throw new RuntimeException();
         }
+    }
 
+    public static Client findClient(String request) {
+        Client currentClient;
+        ClientService clientService = new ClientService();
+        int token = (1 + (int) (Math.random() * 100000));
+
+        for (Client c: clientService.getAllClients()) {
+            if (request.contains(c.getLogin()) && request.contains(c.getPassword() + "")) {
+                currentClient = c;
+                currentClient.setClientToken(token);
+                clientService.updateClient(currentClient);
+                return currentClient;
+            }
+        }
+        currentClient = new Client(token, LogInParser.parseLogin(request), LogInParser.parsePassword(request), null);
+        clientService.createClient(currentClient);
+        return currentClient;
+    }
+/*
+    public static Session updateSession(Client client, Session session){
+        SessionService sessionService = new SessionService();
+        List<Client> clients = new ArrayList<>();
+        for (Session s: sessionService.getAllSessions()) {
+            if (s.equals(session)) {
+                return session;
+            }
+        }
+        clients = session.getClients();
+        clients.add(client);
+        session.setClients(clients);
+        sessionService.createSession(session);
+        return session;
+    }
+
+ */
+
+    public static Session createSession(String host, Client client) {
+        int token = (1 + (int) (Math.random() * 100000));
+        SessionService sessionService = new SessionService();
+        List<Client> clients = new ArrayList<>();
+        clients.add(client);
+        Session session = new Session(new Date(), ServerConstant.PORT, true, ServerConstant.IP,
+                host, token, clients);
+        sessionService.createSession(session);
+        return session;
     }
 
 }

@@ -1,18 +1,11 @@
 package main;
 
-import dao.impl.ClientDaoImpl;
-import dao.impl.SessionDaoImpl;
 import model.Client;
-import model.Session;
-import service.ClientService;
-import service.SessionService;
-import util.ClientUtil;
-
-import java.util.Arrays;
+import util.ConnectionUtil;
 
 public class Main {
     public static void main(String[] args) {
-        ClientUtil clientUtil = new ClientUtil("127.0.0.1", 8000,
+        ConnectionUtil clientUtil = new ConnectionUtil("127.0.0.1", 8000,
                 new Client(0, "sdf", "12332", null));
         clientUtil.createConnection();
 
