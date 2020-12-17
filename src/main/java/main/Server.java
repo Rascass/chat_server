@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.concurrent.locks.ReadWriteLock;
 
 public class Server {
-    Client currentClient;
+    public static Client currentClient;
     public static void main(String[] args) {
         try (ServerSocket serverSocket = new ServerSocket(ServerConstant.PORT)) {
             while (true) {
@@ -40,7 +40,6 @@ public class Server {
     }
 
     public static Response findClient(String request) {
-        Client currentClient;
         ClientService clientService = new ClientService();
         ClientDaoImpl clientDaoImpl = new ClientDaoImpl();
         int clientCounter = clientDaoImpl.getLastClient();
