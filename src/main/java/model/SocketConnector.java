@@ -4,12 +4,12 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Phone implements Closeable {
+public class SocketConnector implements Closeable {
     private final Socket socket;
     private final BufferedReader reader;
     private final BufferedWriter writer;
 
-    public Phone(String ip, int port) {
+    public SocketConnector(String ip, int port) {
         try {
             this.socket = new Socket(ip, port);
             this.reader = createReader();
@@ -19,7 +19,7 @@ public class Phone implements Closeable {
         }
     }
 
-    public Phone(ServerSocket server) {
+    public SocketConnector(ServerSocket server) {
         try {
             this.socket = server.accept();
             this.reader = createReader();

@@ -7,28 +7,31 @@ import constant.ServerConstant;
 import dao.impl.ClientDaoImpl;
 import dao.impl.SessionDaoImpl;
 import model.*;
+import model.message.Response;
 import service.ClientService;
 import service.SessionService;
 import util.LogInParser;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.locks.ReadWriteLock;
 
 public class Server {
-
+    Client currentClient;
     public static void main(String[] args) {
         try (ServerSocket serverSocket = new ServerSocket(ServerConstant.PORT)) {
             while (true) {
-                Phone phone = new Phone(serverSocket);
+                SocketConnector socketConnector = new SocketConnector(serverSocket);
                 new Thread(()->{
-                    String request = phone.readLine();
-                    Client currentClient = findClient(request);
-                    Session session = createSession("", currentClient);
-
+                    String request = socketConnector.readLine();
+                    Response response;
+                    response = findClient(request);
+                    socketConnector.writeLine(response.toString());
+                    response = createSession("", currentClient);
+                    socketConnector.writeLine(response.toString());
                 }).start();
             }
         } catch (IOException e) {
@@ -36,7 +39,7 @@ public class Server {
         }
     }
 
-    public static Client findClient(String request) {
+    public static Response findClient(String request) {
         Client currentClient;
         ClientService clientService = new ClientService();
         ClientDaoImpl clientDaoImpl = new ClientDaoImpl();
@@ -49,31 +52,16 @@ public class Server {
                 currentClient = c;
                 currentClient.setClientToken(token);
                 clientService.updateClient(currentClient);
-                return currentClient;
+                return new Response(0,"authorization and token set is successful");
             }
         }
         currentClient = new Client(token, LogInParser.parseLogin(request), LogInParser.parsePassword(request), null);
         clientService.createClient(currentClient);
-        return currentClient;
-    }
-/*
-    public static Session updateSession(Client client, Session session){
-        SessionService sessionService = new SessionService();
-        List<Client> clients = new ArrayList<>();
-        for (Session s: sessionService.getAllSessions()) {
-            if (s.equals(session)) {
-                return session;
-            }
-        }
-        clients = session.getClients();
-        clients.add(client);
-        session.setClients(clients);
-        sessionService.createSession(session);
-        return session;
-    }
- */
 
-    public static Session createSession(String host, Client client) {
+        return new Response(0,"connection successful");
+    }
+
+    public static Response createSession(String host, Client client) {
         int token = (1 + (int) (Math.random() * 100000));
         SessionService sessionService = new SessionService();
         SessionDaoImpl sessionDaoImpl = new SessionDaoImpl();
@@ -86,7 +74,7 @@ public class Server {
         Session session = new Session(new Date(), ServerConstant.PORT, true, ServerConstant.IP,
                 host, token, clients);
         sessionService.createSession(session);
-        return session;
+        return new Response(0,"session established");
     }
 
 }

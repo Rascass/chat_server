@@ -14,7 +14,7 @@ public class Client extends AbstractModel {
     private int password;
     private List<Session> sessionList;
     private static int counter;
-    private Phone phone;
+    private SocketConnector socketConnector;
 
     public Client() {
     }
@@ -68,9 +68,9 @@ public class Client extends AbstractModel {
     }
 
     public void logIn() {
-        this.phone = new Phone(ServerConstant.IP, ServerConstant.PORT);
+        this.socketConnector = new SocketConnector(ServerConstant.IP, ServerConstant.PORT);
         String request = new LogInMessage(login, password).toString();
-        phone.writeLine(request);
+        socketConnector.writeLine(request);
     }
 
     @Override
