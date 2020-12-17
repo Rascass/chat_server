@@ -1,5 +1,6 @@
 package model;
 
+import constant.ServerConstant;
 import dao.AbstractModel;
 import model.message.LogInMessage;
 
@@ -66,11 +67,10 @@ public class Client extends AbstractModel {
         this.sessionList = sessionList;
     }
 
-    public boolean logIn(String ip, int port) {
-        this.phone = new Phone(ip, port);
+    public void logIn() {
+        this.phone = new Phone(ServerConstant.IP, ServerConstant.PORT);
         String request = new LogInMessage(login, password).toString();
         phone.writeLine(request);
-        return phone.readLine().equals("true");
     }
 
     @Override

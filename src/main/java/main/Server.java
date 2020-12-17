@@ -4,6 +4,8 @@ package main;
 
 
 import constant.ServerConstant;
+import dao.impl.ClientDaoImpl;
+import dao.impl.SessionDaoImpl;
 import model.*;
 import service.ClientService;
 import service.SessionService;
@@ -19,13 +21,14 @@ import java.util.List;
 public class Server {
 
     public static void main(String[] args) {
-
-        try (ServerSocket serverSocket = new ServerSocket(ServerConstant.PORT);
-             Phone phone = new Phone(serverSocket)) {
+        try (ServerSocket serverSocket = new ServerSocket(ServerConstant.PORT)) {
             while (true) {
+                Phone phone = new Phone(serverSocket);
                 new Thread(()->{
-                    Client currentClient = findClient(phone.readLine());
+                    String request = phone.readLine();
+                    Client currentClient = findClient(request);
                     Session session = createSession("", currentClient);
+
                 }).start();
             }
         } catch (IOException e) {
@@ -36,6 +39,9 @@ public class Server {
     public static Client findClient(String request) {
         Client currentClient;
         ClientService clientService = new ClientService();
+        ClientDaoImpl clientDaoImpl = new ClientDaoImpl();
+        int clientCounter = clientDaoImpl.getLastClient();
+        Client.setCounter(clientCounter);
         int token = (1 + (int) (Math.random() * 100000));
 
         for (Client c: clientService.getAllClients()) {
@@ -65,14 +71,18 @@ public class Server {
         sessionService.createSession(session);
         return session;
     }
-
  */
 
     public static Session createSession(String host, Client client) {
         int token = (1 + (int) (Math.random() * 100000));
         SessionService sessionService = new SessionService();
+        SessionDaoImpl sessionDaoImpl = new SessionDaoImpl();
+        int sessionCounter = sessionDaoImpl.getLastSessionId();
+        Session.setCounter(sessionCounter);
+
         List<Client> clients = new ArrayList<>();
         clients.add(client);
+
         Session session = new Session(new Date(), ServerConstant.PORT, true, ServerConstant.IP,
                 host, token, clients);
         sessionService.createSession(session);

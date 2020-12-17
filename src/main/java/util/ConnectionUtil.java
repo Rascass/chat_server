@@ -1,5 +1,6 @@
 package util;
 
+import constant.ServerConstant;
 import model.Client;
 
 public class ConnectionUtil {
@@ -14,6 +15,6 @@ public class ConnectionUtil {
     }
 
     public void createConnection() {
-        client.logIn(ip, port);
+        client.logIn();
     }
 }
