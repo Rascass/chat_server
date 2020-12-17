@@ -1,7 +1,7 @@
 package model;
 
 import dao.AbstractModel;
-import dao.impl.ClientDaoImpl;
+import model.message.LogInMessage;
 
 import java.util.List;
 import java.util.Objects;
@@ -13,6 +13,7 @@ public class Client extends AbstractModel {
     private int password;
     private List<Session> sessionList;
     private static int counter;
+    private Phone phone;
 
     public Client() {
     }
@@ -63,6 +64,16 @@ public class Client extends AbstractModel {
 
     public void setSessionList(List<Session> sessionList) {
         this.sessionList = sessionList;
+    }
+
+    public void connectToServer(String ip, int port) {
+        this.phone = new Phone(ip, port);
+    }
+
+    public boolean logIn() {
+        String request = new LogInMessage(login, password).toString();
+        phone.writeLine(request);
+        return phone.readLine().equals("true");
     }
 
     @Override

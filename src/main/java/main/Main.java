@@ -11,6 +11,11 @@ import java.util.Arrays;
 
 public class Main {
     public static void main(String[] args) {
+        Client client = new Client(123, "sdf", "12332", null);
+        client.connectToServer("127.0.0.1", 8000);
+        client.logIn();
+
+        /*
         ClientDaoImpl clientDaoImpl = new ClientDaoImpl();
         int clientCounter = clientDaoImpl.getLastClient();
         Client.setCounter(clientCounter);
@@ -44,5 +49,7 @@ public class Main {
         sessionService.updateSession(session);
         client.setSessionList(Arrays.asList(session));
         clientService.updateClient(client);
+
+         */
     }
 }
