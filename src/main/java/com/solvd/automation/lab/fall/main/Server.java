@@ -49,19 +49,21 @@ public class Server {
         }
         currentClient = new Client(token, LogInParser.parseLogin(request), LogInParser.parsePassword(request).toString(), null);
         clientService.createClient(currentClient);
-
         return new Response(0,"connection successful");
     }
 
     public static Response createSession(String host, Client client) {
         int token = (1 + (int) (Math.random() * 100000));
         SessionService sessionService = new SessionService();
+        ClientService clientService = new ClientService();
         int sessionCounter = sessionService.getLastSessionId();
+        int clientCounter = clientService.getLastClientId();
+        System.out.println(sessionCounter);
+        System.out.println(clientCounter);
         Session.setCounter(sessionCounter);
-
+        Client.setCounter(clientCounter);
         List<Client> clients = new ArrayList<>();
         clients.add(client);
-
         Session session = new Session(new Date(), ServerConstant.PORT, true, ServerConstant.IP,
                 host, token, clients);
         sessionService.createSession(session);

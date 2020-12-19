@@ -11,7 +11,6 @@ import java.io.*;
 public class SessionFactory {
 
     public static final Logger LOGGER = Logger.getLogger(SessionFactory.class);
-
     private static SqlSessionFactory sqlSessionFactory = null;
 
     static {
@@ -20,7 +19,8 @@ public class SessionFactory {
             Reader is  = Resources.getResourceAsReader(resource);
             System.out.println(is);
             sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);
-        } catch (IOException e) {
+        } catch (Exception e) {
+            System.out.println("!!!");
             LOGGER.error(e.getMessage());
         }
     }
