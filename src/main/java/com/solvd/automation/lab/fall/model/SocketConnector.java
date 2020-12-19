@@ -47,8 +47,6 @@ public class SocketConnector implements Closeable {
         }
     }
 
-
-
     private BufferedReader createReader() {
         try {
             return new BufferedReader(new InputStreamReader(socket.getInputStream()));

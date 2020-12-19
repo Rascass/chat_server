@@ -1,7 +1,9 @@
 package com.solvd.automation.lab.fall.main;
 
 import com.solvd.automation.lab.fall.constant.ServerConstant;
+import com.solvd.automation.lab.fall.listener.Listener;
 import com.solvd.automation.lab.fall.model.*;
+import com.solvd.automation.lab.fall.model.message.LogInMessage;
 import com.solvd.automation.lab.fall.model.message.Response;
 import com.solvd.automation.lab.fall.service.ClientService;
 import com.solvd.automation.lab.fall.service.SessionService;
@@ -40,6 +42,7 @@ public class Server {
         int token = (1 + (int) (Math.random() * 100000));
 
         for (Client c: clientService.getAllClients()) {
+            System.out.println(request);
             if (request.contains(c.getLogin()) && request.contains(c.getPassword() + "")) {
                 currentClient = c;
                 currentClient.setClientToken(token);
