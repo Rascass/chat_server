@@ -5,6 +5,7 @@ import com.solvd.automation.lab.fall.dao.AbstractModel;
 import com.solvd.automation.lab.fall.dao.ClientDao;
 import com.solvd.automation.lab.fall.model.Client;
 import com.solvd.automation.lab.fall.model.message.LogInMessage;
+import com.solvd.automation.lab.fall.model.message.SearchMessage;
 import org.apache.ibatis.session.SqlSession;
 
 import java.util.List;
@@ -72,6 +73,14 @@ public class ClientDaoImpl implements ClientDao {
     public Client getByLoginAndHash(LogInMessage logInMessage) {
         SqlSession sqlSession = SessionFactory.getSession();
         Client client = sqlSession.selectOne(namespace + ".getByLoginAndHash", logInMessage);
+        sqlSession.close();
+        return client;
+    }
+
+    @Override
+    public Client getByLogin(SearchMessage searchMessage) {
+        SqlSession sqlSession = SessionFactory.getSession();
+        Client client = sqlSession.selectOne(namespace + ".getByLogin", searchMessage);
         sqlSession.close();
         return client;
     }

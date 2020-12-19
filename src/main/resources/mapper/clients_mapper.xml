@@ -13,6 +13,16 @@
         ON SessionClients.sessionId = Sessions.sessionId
         WHERE Clients.clientId=#{id}
     </select>
+    <select id="getByLogin" resultMap="clients_map">
+        SELECT Sessions.sessionId as sessionId, Clients.clientId as clientId, start, port, isActive, ip, host,
+        sessionToken, clientToken, login, passwordHash
+        FROM Clients
+        LEFT JOIN SessionClients
+        ON SessionClients.clientId = Clients.clientId
+        LEFT JOIN Sessions
+        ON SessionClients.sessionId = Sessions.sessionId
+        WHERE Clients.login=#{login}
+    </select>
     <select id="get" resultMap="clients_map">
         SELECT Sessions.sessionId as sessionId, Clients.clientId as clientId, start, port, isActive, ip, host,
         sessionToken, clientToken, login, passwordHash

@@ -4,6 +4,7 @@ import com.solvd.automation.lab.fall.dao.ClientDao;
 import com.solvd.automation.lab.fall.dao.impl.ClientDaoImpl;
 import com.solvd.automation.lab.fall.model.Client;
 import com.solvd.automation.lab.fall.model.message.LogInMessage;
+import com.solvd.automation.lab.fall.model.message.SearchMessage;
 
 import java.util.List;
 
@@ -37,5 +38,9 @@ public class ClientService {
 
     public Client getClientByLoginAndHash(LogInMessage logInMessage) {
         return clientDao.getByLoginAndHash(logInMessage);
+    }
+
+    public Client getClientByLogin(SearchMessage searchMessage) {
+        return clientDao.getByLogin(searchMessage);
     }
 }

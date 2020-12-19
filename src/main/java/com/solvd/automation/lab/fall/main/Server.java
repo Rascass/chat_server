@@ -36,22 +36,32 @@ public class Server {
 
     public static Response findClient(String request) {
         ClientService clientService = new ClientService();
-        int clientCounter = clientService.getLastClientId();
-        Client.setCounter(clientCounter);
-        int token = (1 + (int) (Math.random() * 100000));
-        System.out.println(request);
         String login = LogInParser.parseLogin(request);
         int passwordHash = LogInParser.parsePassword(request);
         LogInMessage logInMessage = new LogInMessage(login, passwordHash);
+        int token = (1 + (int) (Math.random() * 100000));
             if (clientService.getClientByLoginAndHash(logInMessage) != null) {
-                currentClient = clientService.getClientByLoginAndHash(logInMessage);
-                currentClient.setClientToken(token);
-                clientService.updateClient(currentClient);
-                return new Response(0,"authorization and token set is successful");
+                authenticate(logInMessage, token);
+                return new Response(0,"authentication and token set is successful");
+            } else {
+                authorizate(token, login, passwordHash);
+                return new Response(0,"client was created");
             }
-        currentClient = new Client(token, LogInParser.parseLogin(request), LogInParser.parsePassword(request), null);
+    }
+
+    public static void authenticate(LogInMessage logInMessage, int token) {
+        ClientService clientService = new ClientService();
+        currentClient = clientService.getClientByLoginAndHash(logInMessage);
+        currentClient.setClientToken(token);
+        clientService.updateClient(currentClient);
+    }
+
+    public static void authorizate(int token, String login, int passwordHash) {
+        ClientService clientService = new ClientService();
+        int clientCounter = clientService.getLastClientId();
+        Client.setCounter(clientCounter);
+        currentClient = new Client(token, login, passwordHash, null);
         clientService.createClient(currentClient);
-        return new Response(0,"connection successful");
     }
 
     public static Response createSession(String host, Client client) {
