@@ -23,8 +23,7 @@ public class Server {
                 SocketConnector socketConnector = new SocketConnector(serverSocket);
                 new Thread(()->{
                     String request = socketConnector.readLine();
-                    Response response;
-                    response = findClient(request);
+                    Response response = Listener.getResponse(request);
                     socketConnector.writeLine(response.toString());
                     response = createSession("", currentClient);
                     socketConnector.writeLine(response.toString());
@@ -40,17 +39,17 @@ public class Server {
         int clientCounter = clientService.getLastClientId();
         Client.setCounter(clientCounter);
         int token = (1 + (int) (Math.random() * 100000));
-
-        for (Client c: clientService.getAllClients()) {
-            System.out.println(request);
-            if (request.contains(c.getLogin()) && request.contains(c.getPassword() + "")) {
-                currentClient = c;
+        System.out.println(request);
+        String login = LogInParser.parseLogin(request);
+        int passwordHash = LogInParser.parsePassword(request);
+        LogInMessage logInMessage = new LogInMessage(login, passwordHash);
+            if (clientService.getClientByLoginAndHash(logInMessage) != null) {
+                currentClient = clientService.getClientByLoginAndHash(logInMessage);
                 currentClient.setClientToken(token);
                 clientService.updateClient(currentClient);
                 return new Response(0,"authorization and token set is successful");
             }
-        }
-        currentClient = new Client(token, LogInParser.parseLogin(request), LogInParser.parsePassword(request).toString(), null);
+        currentClient = new Client(token, LogInParser.parseLogin(request), LogInParser.parsePassword(request), null);
         clientService.createClient(currentClient);
         return new Response(0,"connection successful");
     }

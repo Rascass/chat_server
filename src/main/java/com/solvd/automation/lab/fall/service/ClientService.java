@@ -3,6 +3,7 @@ package com.solvd.automation.lab.fall.service;
 import com.solvd.automation.lab.fall.dao.ClientDao;
 import com.solvd.automation.lab.fall.dao.impl.ClientDaoImpl;
 import com.solvd.automation.lab.fall.model.Client;
+import com.solvd.automation.lab.fall.model.message.LogInMessage;
 
 import java.util.List;
 
@@ -32,5 +33,9 @@ public class ClientService {
 
     public int getLastClientId() {
         return clientDao.getLastClientId();
+    }
+
+    public Client getClientByLoginAndHash(LogInMessage logInMessage) {
+        return clientDao.getByLoginAndHash(logInMessage);
     }
 }

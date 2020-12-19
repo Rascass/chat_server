@@ -4,7 +4,7 @@ import com.solvd.automation.lab.fall.interfaces.Parser;
 import com.solvd.automation.lab.fall.util.LogInParser;
 
 public enum Pattern {
-    LOGINPATTERN("(\\{\"login\":)\"[a-zA-Z0-9]+\"(,\"password\":)[0-9]+\\}", new LogInParser());
+    LOGINPATTERN("(\\{\"login\":)\"[a-zA-Z0-9]+\"(,\"password\":)[-]?[0-9]+\\}", new LogInParser());
 
     private String patternName;
     private Parser parser;

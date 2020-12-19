@@ -22,6 +22,16 @@
         LEFT JOIN Sessions
         ON SessionClients.sessionId = Sessions.sessionId
     </select>
+    <select id="getByLoginAndHash" resultMap="clients_map">
+        SELECT Sessions.sessionId as sessionId, Clients.clientId as clientId, start, port, isActive, ip, host,
+        sessionToken, clientToken, login, passwordHash
+        FROM Clients
+        LEFT JOIN SessionClients
+        ON SessionClients.clientId = Clients.clientId
+        LEFT JOIN Sessions
+        ON SessionClients.sessionId = Sessions.sessionId
+        WHERE Clients.login=#{login} AND Clients.passwordHash=#{passwordHash}
+    </select>
     <delete id="deleteById">
         DELETE FROM Clients WHERE Clients.clientId=#{id}
     </delete>
