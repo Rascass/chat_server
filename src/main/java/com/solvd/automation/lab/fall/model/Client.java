@@ -9,17 +9,17 @@ public class Client extends AbstractModel {
 
     private int clientToken;
     private String login;
-    private int password;
+    private int passwordHash;
     private List<Session> sessionList;
     private static int counter;
 
     public Client() {
     }
 
-    public Client(int clientToken, String login, int password, List<Session> sessionList) {
+    public Client(int clientToken, String login, int passwordHash, List<Session> sessionList) {
         this.clientToken = clientToken;
         this.login = login;
-        this.setPassword(password);
+        this.setPasswordHash(passwordHash);
         this.setSessionList(sessionList);
         this.setId(++this.counter);
     }
@@ -48,12 +48,12 @@ public class Client extends AbstractModel {
         this.login = login;
     }
 
-    public int getPassword() {
-        return password;
+    public int getPasswordHash() {
+        return passwordHash;
     }
 
-    public void setPassword(int password) {
-        this.password = password;
+    public void setPasswordHash(int passwordHash) {
+        this.passwordHash = passwordHash;
     }
 
     public List<Session> getSessionList() {
@@ -71,13 +71,13 @@ public class Client extends AbstractModel {
         Client client = (Client) o;
         return clientToken == client.clientToken &&
                 Objects.equals(login, client.login) &&
-                Objects.equals(password, client.password) &&
+                Objects.equals(passwordHash, client.passwordHash) &&
                 Objects.equals(sessionList, client.sessionList);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(clientToken, login, password, sessionList);
+        return Objects.hash(clientToken, login, passwordHash, sessionList);
     }
 
     @Override
@@ -85,7 +85,7 @@ public class Client extends AbstractModel {
         return "Client{" +
                 "clientToken=" + clientToken +
                 ", login='" + login + '\'' +
-                ", password='" + password + '\'' +
+                ", password='" + passwordHash + '\'' +
                 ", sessionList=" + sessionList +
                 '}';
     }

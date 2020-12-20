@@ -9,16 +9,6 @@ public class SocketConnector implements Closeable {
     private final BufferedReader reader;
     private final BufferedWriter writer;
 
-    public SocketConnector(String ip, int port) {
-        try {
-            this.socket = new Socket(ip, port);
-            this.reader = createReader();
-            this.writer = createWriter();
-        } catch (IOException e) {
-            throw new RuntimeException();
-        }
-    }
-
     public SocketConnector(ServerSocket server) {
         try {
             this.socket = server.accept();
@@ -62,7 +52,6 @@ public class SocketConnector implements Closeable {
             throw new RuntimeException();
         }
     }
-
 
     @Override
     public void close() throws IOException {

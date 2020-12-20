@@ -1,10 +1,10 @@
 package com.solvd.automation.lab.fall.listener;
 
-import com.solvd.automation.lab.fall.constant.ServerConstant;
 import com.solvd.automation.lab.fall.interfaces.Parser;
 import com.solvd.automation.lab.fall.main.Server;
-import com.solvd.automation.lab.fall.model.SocketConnector;
+import com.solvd.automation.lab.fall.model.message.LogInMessage;
 import com.solvd.automation.lab.fall.model.message.Response;
+import com.solvd.automation.lab.fall.model.message.SearchMessage;
 import com.solvd.automation.lab.fall.util.LogInParser;
 
 public class Listener {
@@ -25,7 +25,8 @@ public class Listener {
             return null;
         }
         if (parser.getClass() == LogInParser.class) {
-            return Server.findClient(request);
+            LogInMessage logInMessage = new LogInParser().parse(request);
+            return Server.authenticate(logInMessage);
         }
         return null;
     }

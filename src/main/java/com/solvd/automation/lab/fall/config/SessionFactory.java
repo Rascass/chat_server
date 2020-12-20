@@ -20,7 +20,6 @@ public class SessionFactory {
             System.out.println(is);
             sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);
         } catch (Exception e) {
-            System.out.println("!!!");
             LOGGER.error(e.getMessage());
         }
     }
