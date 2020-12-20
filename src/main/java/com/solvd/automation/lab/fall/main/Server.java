@@ -36,16 +36,13 @@ public class Server {
 
     public static Response findClient(String request) {
         ClientService clientService = new ClientService();
-        String login = LogInParser.parseLogin(request);
-        int passwordHash = LogInParser.parsePassword(request);
-        LogInMessage logInMessage = new LogInMessage(login, passwordHash);
+        LogInMessage logInMessage = new LogInParser().parse(request);
         int token = (1 + (int) (Math.random() * 100000));
             if (clientService.getClientByLoginAndHash(logInMessage) != null) {
                 authenticate(logInMessage, token);
                 return new Response(0,"authentication and token set is successful");
             } else {
-                authorizate(token, login, passwordHash);
-                return new Response(0,"client was created");
+                return new Response(1,"client was not found");
             }
     }
 

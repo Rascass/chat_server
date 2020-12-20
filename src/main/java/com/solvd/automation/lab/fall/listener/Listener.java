@@ -25,10 +25,7 @@ public class Listener {
             return null;
         }
         if (parser.getClass() == LogInParser.class) {
-//            login & make response
-            SocketConnector socketConnector = new SocketConnector(ServerConstant.IP, ServerConstant.PORT);
-            Response response = Server.findClient(request);
-            return response;
+            return Server.findClient(request);
         }
         return null;
     }
