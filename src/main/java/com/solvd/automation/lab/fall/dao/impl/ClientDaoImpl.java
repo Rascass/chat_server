@@ -44,7 +44,7 @@ public class ClientDaoImpl implements ClientDao {
     public void update(Client client) {
         SqlSession sqlSession = SessionFactory.getSession();
         sqlSession.update(namespace + ".update", client);
-        if (client.getSessionList() != null) {
+        if (client.getSessionList().size() > 0) {
             sqlSession.update(namespace + ".updateJuncion", client);
         }
         sqlSession.commit();
