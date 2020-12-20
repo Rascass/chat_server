@@ -1,10 +1,9 @@
-package dao.impl;
+package com.solvd.automation.lab.fall.dao.impl;
 
-import config.SessionFactory;
-import dao.AbstractModel;
-import dao.SessionDao;
-import model.Client;
-import model.Session;
+import com.solvd.automation.lab.fall.config.SessionFactory;
+import com.solvd.automation.lab.fall.dao.AbstractModel;
+import com.solvd.automation.lab.fall.dao.SessionDao;
+import com.solvd.automation.lab.fall.model.Session;
 import org.apache.ibatis.session.SqlSession;
 
 import java.util.List;

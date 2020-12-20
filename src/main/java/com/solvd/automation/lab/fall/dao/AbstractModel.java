@@ -1,4 +1,4 @@
-package dao;
+package com.solvd.automation.lab.fall.dao;
 
 public class AbstractModel {
 

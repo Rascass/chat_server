@@ -1,6 +1,6 @@
-package model;
+package com.solvd.automation.lab.fall.model;
 
-import dao.AbstractModel;
+import com.solvd.automation.lab.fall.dao.AbstractModel;
 
 import java.util.Date;
 import java.util.List;

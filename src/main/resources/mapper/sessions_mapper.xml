@@ -58,7 +58,7 @@
         WHERE sessionId=#{id}
     </update>
 
-    <resultMap id="sessions_map" type="model.Session" autoMapping="false">
+    <resultMap id="sessions_map" type="com.solvd.automation.lab.fall.model.Session" autoMapping="false">
         <id property="id" column="sessionId"/>
         <result property="start" column="start"/>
         <result property="port" column="port"/>
@@ -66,11 +66,11 @@
         <result property="ip" column="ip"/>
         <result property="host" column="host"/>
         <result property="sessionToken" column="sessionToken"/>
-        <collection property="clients" ofType="model.Client">
+        <collection property="clients" ofType="com.solvd.automation.lab.fall.model.Client">
             <id property="id" column="clientId" />
             <result property="clientToken" column="clientToken"/>
             <result property="login" column="login"/>
-            <result property="password" column="passwordHash"/>
+            <result property="passwordHash" column="passwordHash"/>
         </collection>
     </resultMap>
 </mapper>

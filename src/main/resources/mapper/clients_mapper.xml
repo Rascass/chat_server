@@ -13,6 +13,16 @@
         ON SessionClients.sessionId = Sessions.sessionId
         WHERE Clients.clientId=#{id}
     </select>
+    <select id="getByLogin" resultMap="clients_map">
+        SELECT Sessions.sessionId as sessionId, Clients.clientId as clientId, start, port, isActive, ip, host,
+        sessionToken, clientToken, login, passwordHash
+        FROM Clients
+        LEFT JOIN SessionClients
+        ON SessionClients.clientId = Clients.clientId
+        LEFT JOIN Sessions
+        ON SessionClients.sessionId = Sessions.sessionId
+        WHERE Clients.login=#{login}
+    </select>
     <select id="get" resultMap="clients_map">
         SELECT Sessions.sessionId as sessionId, Clients.clientId as clientId, start, port, isActive, ip, host,
         sessionToken, clientToken, login, passwordHash
@@ -22,6 +32,16 @@
         LEFT JOIN Sessions
         ON SessionClients.sessionId = Sessions.sessionId
     </select>
+    <select id="getByLoginAndHash" resultMap="clients_map">
+        SELECT Sessions.sessionId as sessionId, Clients.clientId as clientId, start, port, isActive, ip, host,
+        sessionToken, clientToken, login, passwordHash
+        FROM Clients
+        LEFT JOIN SessionClients
+        ON SessionClients.clientId = Clients.clientId
+        LEFT JOIN Sessions
+        ON SessionClients.sessionId = Sessions.sessionId
+        WHERE Clients.login=#{login} AND Clients.passwordHash=#{passwordHash}
+    </select>
     <delete id="deleteById">
         DELETE FROM Clients WHERE Clients.clientId=#{id}
     </delete>
@@ -30,7 +50,7 @@
     </delete>
     <insert id="create">
         INSERT INTO Clients(clientId, clientToken, login, passwordHash)
-        VALUES(#{id}, #{clientToken}, #{login}, #{password})
+        VALUES(#{id}, #{clientToken}, #{login}, #{passwordHash})
     </insert>
     <insert id="bind">
         INSERT INTO SessionClients(clientId, sessionId) VALUES
@@ -43,7 +63,7 @@
         UPDATE Clients SET
         clientToken=#{clientToken},
         login=#{login},
-        passwordHash=#{password}
+        passwordHash=#{passwordHash}
         WHERE clientId=#{id}
     </update>
     <update id="updateJuncion">
@@ -55,12 +75,12 @@
         WHERE clientId=#{id}
     </update>
 
-    <resultMap id="clients_map" type="model.Client" autoMapping="false">
+    <resultMap id="clients_map" type="com.solvd.automation.lab.fall.model.Client" autoMapping="false">
         <id property="id" column="clientId"/>
         <result property="clientToken" column="clientToken"/>
         <result property="login" column="login"/>
-        <result property="password" column="passwordHash"/>
-        <collection property="sessionList" ofType="model.Session">
+        <result property="passwordHash" column="passwordHash"/>
+        <collection property="sessionList" ofType="com.solvd.automation.lab.fall.model.Session">
             <id property="id" column="sessionId"/>
             <result property="start" column="start"/>
             <result property="port" column="port"/>
