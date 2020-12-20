@@ -38,10 +38,13 @@ public class Server {
     public static Response authenticate(LogInMessage logInMessage) {
         int token = (1 + (int) (Math.random() * 100000));
         ClientService clientService = new ClientService();
-        if (clientService.getClientByLoginAndHash(logInMessage) == null) {
+        if (clientService.getClientByLogin(logInMessage.getLogin()) == null) {
             return new Response(2,"client was not found");
         }
-        currentClient = clientService.getClientByLoginAndHash(logInMessage);
+        currentClient = clientService.getClientByLogin(logInMessage.getLogin());
+        if (currentClient.getPasswordHash() != logInMessage.getPasswordHash()) {
+            return new Response(1,"wrong password");
+        }
         currentClient.setClientToken(token);
         clientService.updateClient(currentClient);
         return new Response(0,"authentication and token set is successful");

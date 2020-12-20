@@ -78,9 +78,9 @@ public class ClientDaoImpl implements ClientDao {
     }
 
     @Override
-    public Client getByLogin(SearchMessage searchMessage) {
+    public Client getByLogin(String login) {
         SqlSession sqlSession = SessionFactory.getSession();
-        Client client = sqlSession.selectOne(namespace + ".getByLogin", searchMessage);
+        Client client = sqlSession.selectOne(namespace + ".getByLogin", login);
         sqlSession.close();
         return client;
     }

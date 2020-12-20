@@ -40,7 +40,7 @@ public class ClientService {
         return clientDao.getByLoginAndHash(logInMessage);
     }
 
-    public Client getClientByLogin(SearchMessage searchMessage) {
-        return clientDao.getByLogin(searchMessage);
+    public Client getClientByLogin(String login) {
+        return clientDao.getByLogin(login);
     }
 }

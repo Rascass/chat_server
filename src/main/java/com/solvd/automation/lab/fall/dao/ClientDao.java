@@ -15,5 +15,5 @@ public interface ClientDao {
     void delete(int id);
     int getLastClientId();
     Client getByLoginAndHash(LogInMessage logInMessage);
-    Client getByLogin(SearchMessage searchMessage);
+    Client getByLogin(String login);
 }
