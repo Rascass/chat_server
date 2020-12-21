@@ -5,6 +5,7 @@ import com.solvd.automation.lab.fall.interfaces.Parser;
 import com.solvd.automation.lab.fall.main.Server;
 import com.solvd.automation.lab.fall.model.ClientHandler;
 import com.solvd.automation.lab.fall.model.message.*;
+import com.solvd.automation.lab.fall.util.ChecksumParser;
 import com.solvd.automation.lab.fall.util.LogInParser;
 import com.solvd.automation.lab.fall.util.RegistrationParser;
 import com.solvd.automation.lab.fall.util.SearchParser;
@@ -39,9 +40,11 @@ public class MyParser {
         } else if (parser.getClass() == SearchParser.class) {
             SearchMessage searchMessage = new SearchParser().parse(request);
             return client.findClient(searchMessage);
-        } else {
+        } else if(parser.getClass() == ChecksumParser.class){
+            ChecksumMessage checksumMessage = new ChecksumParser().parse(request);
+            return client.checksumTo(checksumMessage);
+        } else{
             throw new UnknownRequestType("Can't find format to parse for request: " + request);
         }
-
-    }
+  }
 }

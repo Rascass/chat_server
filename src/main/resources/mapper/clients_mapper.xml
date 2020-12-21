@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="clients_mapper">
     <select id="getById" resultMap="clients_map">
-        SELECT Sessions.sessionId as sessionId, Clients.clientId as clientId, start, port, isActive, ip, host, clientIp,
+        SELECT Sessions.sessionId as sessionId, Clients.clientId as clientId, lastLogin, start, port, isActive, ip, host, clientIp,
         sessionToken, clientToken, login, passwordHash
         FROM Clients
         LEFT JOIN SessionClients
@@ -14,7 +14,7 @@
         WHERE Clients.clientId=#{id}
     </select>
     <select id="getByLogin" resultMap="clients_map">
-        SELECT Sessions.sessionId as sessionId, Clients.clientId as clientId, start, port, isActive, ip, host, clientIp,
+        SELECT Sessions.sessionId as sessionId, Clients.clientId as clientId, lastLogin, start, port, isActive, ip, host, clientIp,
         sessionToken, clientToken, login, passwordHash
         FROM Clients
         LEFT JOIN SessionClients
@@ -24,7 +24,7 @@
         WHERE Clients.login=#{login}
     </select>
     <select id="get" resultMap="clients_map">
-        SELECT Sessions.sessionId as sessionId, Clients.clientId as clientId, start, port, isActive, ip, host, clientIp,
+        SELECT Sessions.sessionId as sessionId, Clients.clientId as clientId, lastLogin, start, port, isActive, ip, host, clientIp,
         sessionToken, clientToken, login, passwordHash
         FROM Clients
         LEFT JOIN SessionClients
@@ -34,7 +34,7 @@
     </select>
     <select id="getByLoginAndHash" resultMap="clients_map">
         SELECT Sessions.sessionId as sessionId, Clients.clientId as clientId, start, port, isActive, ip, host, clientIp,
-        sessionToken, clientToken, login, passwordHash
+        lastLogin, sessionToken, clientToken, login, passwordHash
         FROM Clients
         LEFT JOIN SessionClients
         ON SessionClients.clientId = Clients.clientId
@@ -49,8 +49,8 @@
         DELETE FROM SessionClients WHERE SessionClients.clientId=#{id}
     </delete>
     <insert id="create">
-        INSERT INTO Clients(clientId, clientIp, clientToken, login, passwordHash)
-        VALUES(#{id}, #{clientIp}, #{clientToken}, #{login}, #{passwordHash})
+        INSERT INTO Clients(clientId, clientIp, lastLogin, clientToken, login, passwordHash)
+        VALUES(#{id}, #{clientIp}, #{lastLogin}, #{clientToken}, #{login}, #{passwordHash})
     </insert>
     <insert id="bind">
         INSERT INTO SessionClients(clientId, sessionId) VALUES
@@ -62,6 +62,7 @@
     <update id="update">
         UPDATE Clients SET
         clientIp=#{clientIp},
+        lastLogin=#{lastLogin},
         clientToken=#{clientToken},
         login=#{login},
         passwordHash=#{passwordHash}
@@ -79,6 +80,7 @@
     <resultMap id="clients_map" type="com.solvd.automation.lab.fall.model.Client" autoMapping="false">
         <id property="id" column="clientId"/>
         <result property="clientIp" column="clientIp"/>
+        <result property="lastLogin" column="lastLogin"/>
         <result property="clientToken" column="clientToken"/>
         <result property="login" column="login"/>
         <result property="passwordHash" column="passwordHash"/>

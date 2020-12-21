@@ -2,12 +2,14 @@ package com.solvd.automation.lab.fall.model;
 
 import com.solvd.automation.lab.fall.dao.AbstractModel;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
 public class Client extends AbstractModel {
 
     private String clientIp;
+    private Date lastLogin;
     private int clientToken;
     private String login;
     private int passwordHash;
@@ -17,8 +19,9 @@ public class Client extends AbstractModel {
     public Client() {
     }
 
-    public Client(String clientIp, int clientToken, String login, int passwordHash, List<Session> sessionList) {
+    public Client(String clientIp, Date lastLogin, int clientToken, String login, int passwordHash, List<Session> sessionList) {
         this.clientIp = clientIp;
+        this.lastLogin = lastLogin;
         this.clientToken = clientToken;
         this.login = login;
         this.setPasswordHash(passwordHash);
@@ -32,6 +35,14 @@ public class Client extends AbstractModel {
 
     public void setClientIp(String clientIp) {
         this.clientIp = clientIp;
+    }
+
+    public Date getLastLogin() {
+        return lastLogin;
+    }
+
+    public void setLastLogin(Date lastLogin) {
+        this.lastLogin = lastLogin;
     }
 
     public static int getCounter() {
