@@ -37,6 +37,11 @@ public class SocketConnector implements Closeable {
         }
     }
 
+    public String getIp () {
+        String result = socket.getRemoteSocketAddress().toString();
+        return result.substring(1);
+    }
+
     private BufferedReader createReader() {
         try {
             return new BufferedReader(new InputStreamReader(socket.getInputStream()));

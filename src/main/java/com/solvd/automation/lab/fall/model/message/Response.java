@@ -1,6 +1,6 @@
 package com.solvd.automation.lab.fall.model.message;
 
-public class Response implements AbstractMessage {
+public class Response implements IResponse {
     private int code;
     private String description;
 

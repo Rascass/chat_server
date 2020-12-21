@@ -7,6 +7,7 @@ import java.util.Objects;
 
 public class Client extends AbstractModel {
 
+    private String clientIp;
     private int clientToken;
     private String login;
     private int passwordHash;
@@ -16,12 +17,21 @@ public class Client extends AbstractModel {
     public Client() {
     }
 
-    public Client(int clientToken, String login, int passwordHash, List<Session> sessionList) {
+    public Client(String clientIp, int clientToken, String login, int passwordHash, List<Session> sessionList) {
+        this.clientIp = clientIp;
         this.clientToken = clientToken;
         this.login = login;
         this.setPasswordHash(passwordHash);
         this.setSessionList(sessionList);
         this.setId(++this.counter);
+    }
+
+    public String getClientIp() {
+        return clientIp;
+    }
+
+    public void setClientIp(String clientIp) {
+        this.clientIp = clientIp;
     }
 
     public static int getCounter() {
@@ -83,9 +93,10 @@ public class Client extends AbstractModel {
     @Override
     public String toString() {
         return "Client{" +
-                "clientToken=" + clientToken +
+                "clientIp='" + clientIp + '\'' +
+                ", clientToken=" + clientToken +
                 ", login='" + login + '\'' +
-                ", password='" + passwordHash + '\'' +
+                ", passwordHash=" + passwordHash +
                 ", sessionList=" + sessionList +
                 '}';
     }

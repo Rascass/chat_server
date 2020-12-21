@@ -1,6 +1,6 @@
 package com.solvd.automation.lab.fall.model.message;
 
-public class LogInMessage {
+public class LogInMessage implements AbstractRequest{
     private String login;
     private int passwordHash;
 
