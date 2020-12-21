@@ -4,6 +4,7 @@ import com.solvd.automation.lab.fall.interfaces.Parser;
 import com.solvd.automation.lab.fall.main.Server;
 import com.solvd.automation.lab.fall.model.ClientHandler;
 import com.solvd.automation.lab.fall.model.message.*;
+import com.solvd.automation.lab.fall.util.ChecksumParser;
 import com.solvd.automation.lab.fall.util.LogInParser;
 import com.solvd.automation.lab.fall.util.RegistrationParser;
 import com.solvd.automation.lab.fall.util.SearchParser;
@@ -37,6 +38,11 @@ public class Listener {
             SearchMessage searchMessage = new SearchParser().parse(request);
             return new ClientHandler(Server.socketConnector).findClient(searchMessage);
         }
-        return new LogInResponse(5,"wrong request!!!!!!!!!!!!!!!!!!!");
+        if (parser.getClass() == ChecksumParser.class) {
+            ChecksumMessage checksumMessage = new ChecksumParser().parse(request);
+            return new ClientHandler(Server.socketConnector).checksumTo(checksumMessage);
+        }
+
+        return new Response(5,"wrong request!!!!!!!!!!!!!!!!!!!");
     }
 }

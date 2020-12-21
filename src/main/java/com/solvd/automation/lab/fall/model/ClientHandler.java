@@ -1,6 +1,7 @@
 package com.solvd.automation.lab.fall.model;
 
 import com.solvd.automation.lab.fall.constant.PropertyConstant;
+import com.solvd.automation.lab.fall.constant.TimeConstant;
 import com.solvd.automation.lab.fall.io.PropertyReader;
 import com.solvd.automation.lab.fall.listener.Listener;
 import com.solvd.automation.lab.fall.main.Server;
@@ -13,23 +14,13 @@ import java.util.Date;
 import java.util.List;
 
 public class ClientHandler implements Runnable {
-    private Client currentClient;
+    private static Client currentClient;
     private SocketConnector socketConnector;
-    private Date tokenDate;
+    private volatile Date tokenDate;
+    private static ClientHandler instance;
 
     public ClientHandler(SocketConnector socketConnector) {
         this.socketConnector = socketConnector;
-    }
-
-    public ClientHandler() {
-    }
-
-    public Client getCurrentClient() {
-        return currentClient;
-    }
-
-    public void setCurrentClient(Client currentClient) {
-        this.currentClient = currentClient;
     }
 
     @Override
@@ -51,10 +42,11 @@ public class ClientHandler implements Runnable {
             return new LogInResponse(1,"wrong password");
         }
         currentClient.setClientToken(token);
-        tokenDate = new Date();
-        System.out.println(tokenDate);
         currentClient.setClientIp(socketConnector.getIp());
+        currentClient.setLastLogin(new Date());
+        System.out.println(currentClient.getLastLogin());
         clientService.updateClient(currentClient);
+        System.out.println(clientService.getClientByLogin(logInMessage.getLogin()).getLastLogin());
         return new LogInResponse(0,"authentication and token set is successful");
     }
 
@@ -66,7 +58,7 @@ public class ClientHandler implements Runnable {
         }
         int clientCounter = clientService.getLastClientId();
         Client.setCounter(clientCounter);
-        currentClient = new Client(socketConnector.getIp(), token, registrationMessage.getLogin(), registrationMessage.getRegPassword(), null);
+        currentClient = new Client(socketConnector.getIp(), new Date(), token, registrationMessage.getLogin(), registrationMessage.getRegPassword(), null);
         clientService.createClient(currentClient);
         return new LogInResponse(0, "successful registration");
     }
@@ -90,6 +82,11 @@ public class ClientHandler implements Runnable {
     public SearchResponse findClient (SearchMessage searchMessage) {
         System.out.println(searchMessage.getSearchLogin());
         ClientService clientService = new ClientService();
+        currentClient = clientService.getClientByLogin(searchMessage.getSearchLogin());
+        System.out.println(currentClient.getLastLogin());
+        if ((new Date().getTime() - currentClient.getLastLogin().getTime()) > (TimeConstant.LIFETIME)) {
+            return new SearchResponse(3, "you are lodged out");
+        }
         if (clientService.getClientByLogin(searchMessage.getSearchLogin()) == null) {
             return new SearchResponse(2,"can't find user with such login");
         }
@@ -103,11 +100,12 @@ public class ClientHandler implements Runnable {
 
     public ChecksumFromResponse checksumFrom (ChecksumMessage checksumMessage) {
         ClientService clientService = new ClientService();
-        currentClient = clientService.getClientByLogin(checksumMessage.getLoginOfSender());
+        Client currentClient = clientService.getClientByLogin(checksumMessage.getLoginOfSender());
         return new ChecksumFromResponse(0, "checksum to "
                 + checksumMessage.getLoginOfRecipient() + " was sent");
 
     }
+
 
     public ChecksumFromResponse checksumTo (ChecksumMessage checksumMessage) {
         for (ClientHandler c: Server.clientHandlers) {
