@@ -64,4 +64,8 @@ public class SocketConnector implements Closeable {
         reader.close();
         socket.close();
     }
+
+    public BufferedReader getReader() {
+        return reader;
+    }
 }
