@@ -1,4 +1,4 @@
-package config;
+package com.solvd.automation.lab.fall.config;
 
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
@@ -11,7 +11,6 @@ import java.io.*;
 public class SessionFactory {
 
     public static final Logger LOGGER = Logger.getLogger(SessionFactory.class);
-
     private static SqlSessionFactory sqlSessionFactory = null;
 
     static {
@@ -20,7 +19,7 @@ public class SessionFactory {
             Reader is  = Resources.getResourceAsReader(resource);
             System.out.println(is);
             sqlSessionFactory = new SqlSessionFactoryBuilder().build(is);
-        } catch (IOException e) {
+        } catch (Exception e) {
             LOGGER.error(e.getMessage());
         }
     }

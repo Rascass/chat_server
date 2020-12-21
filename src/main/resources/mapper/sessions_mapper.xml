@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="sessions_mapper">
     <select id="getById" resultMap="sessions_map">
-        SELECT Sessions.sessionId as sessionId, Clients.clientId as clientId, start, port, isActive, ip, host,
+        SELECT Sessions.sessionId as sessionId, Clients.clientId as clientId, start, port, isActive, ip, host, clientIp,
         sessionToken, clientToken, login, passwordHash
         FROM Sessions
         LEFT JOIN SessionClients
@@ -14,7 +14,7 @@
         WHERE Sessions.sessionId=#{id}
     </select>
     <select id="get" resultMap="sessions_map">
-        SELECT Sessions.sessionId as sessionId, Clients.clientId as clientId, start, port, isActive, ip, host,
+        SELECT Sessions.sessionId as sessionId, Clients.clientId as clientId, start, port, isActive, ip, host, clientIp,
         sessionToken, clientToken, login, passwordHash
         FROM Sessions
         LEFT JOIN SessionClients
@@ -58,7 +58,7 @@
         WHERE sessionId=#{id}
     </update>
 
-    <resultMap id="sessions_map" type="model.Session" autoMapping="false">
+    <resultMap id="sessions_map" type="com.solvd.automation.lab.fall.model.Session" autoMapping="false">
         <id property="id" column="sessionId"/>
         <result property="start" column="start"/>
         <result property="port" column="port"/>
@@ -66,11 +66,12 @@
         <result property="ip" column="ip"/>
         <result property="host" column="host"/>
         <result property="sessionToken" column="sessionToken"/>
-        <collection property="clients" ofType="model.Client">
+        <collection property="clients" ofType="com.solvd.automation.lab.fall.model.Client">
             <id property="id" column="clientId" />
+            <result property="clientIp" column="clientIp"/>
             <result property="clientToken" column="clientToken"/>
             <result property="login" column="login"/>
-            <result property="password" column="passwordHash"/>
+            <result property="passwordHash" column="passwordHash"/>
         </collection>
     </resultMap>
 </mapper>
