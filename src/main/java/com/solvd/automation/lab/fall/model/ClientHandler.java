@@ -120,7 +120,7 @@ public class ClientHandler implements Runnable {
 
         } else {
 
-            return new SearchResponse(0, "" + currentClient.getClientIp());
+            return new SearchResponse(0, "" + searchingClient.getClientIp());
         }
     }
 
