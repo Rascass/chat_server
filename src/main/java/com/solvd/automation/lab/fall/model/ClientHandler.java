@@ -96,6 +96,7 @@ public class ClientHandler implements Runnable {
         }
     }
 
+
     public IResponse findClient(SearchMessage searchMessage) {
 
         ClientService clientService = new ClientService();
@@ -123,7 +124,6 @@ public class ClientHandler implements Runnable {
         }
         return new ChecksumFromResponse(0, "checksum to "
                 + checksumMessage.getLoginOfRecipient() + " was sent");
-
     }
 
 
