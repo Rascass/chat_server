@@ -1,11 +1,13 @@
 package com.solvd.automation.lab.fall.util;
 
 import com.solvd.automation.lab.fall.interfaces.Parser;
+import com.solvd.automation.lab.fall.model.Client;
 import com.solvd.automation.lab.fall.model.message.ChecksumMessage;
 import com.solvd.automation.lab.fall.model.message.LogInMessage;
 
+import java.util.Objects;
+
 public class ChecksumParser implements Parser<ChecksumMessage> {
-    //"{"loginFrom":"loginOfSender","loginTo":"loginOfRecipient","checksum":25}"
     public static String parseLoginFrom(String request) {
         int from = request.indexOf("\":\"") + 3;
         int to = request.indexOf("\",\"");
@@ -28,4 +30,5 @@ public class ChecksumParser implements Parser<ChecksumMessage> {
     public ChecksumMessage parse(String request) {
         return new ChecksumMessage(parseLoginFrom(request), parseLoginTo(request), parseChecksum(request));
     }
+
 }
