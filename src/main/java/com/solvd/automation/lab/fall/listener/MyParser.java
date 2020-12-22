@@ -29,6 +29,7 @@ public class MyParser {
 
     public IMessage getResponse(String request) throws UnknownRequestType {
         Parser parser = this.getParser(request);
+
         if (parser == null) {
             return null;
         } else if (parser.getClass() == LogInParser.class) {

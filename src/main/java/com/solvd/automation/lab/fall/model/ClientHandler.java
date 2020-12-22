@@ -71,22 +71,28 @@ public class ClientHandler implements Runnable {
     }
 
     public SearchResponse findClient(SearchMessage searchMessage) {
-        System.out.println(searchMessage.getSearchLogin());
+
         ClientService clientService = new ClientService();
-        currentClient = clientService.getClientByLogin(searchMessage.getSearchLogin());
-        System.out.println(currentClient.getLastLogin());
-        if ((new Date().getTime() - currentClient.getLastLogin().getTime()) > (TimeConstant.LIFETIME)) {
-            return new SearchResponse(3, "you are lodged out");
-        }
-        if (clientService.getClientByLogin(searchMessage.getSearchLogin()) == null) {
+
+        String searchingLogin = searchMessage.getSearchLogin();
+        LOGGER.info("Searching for " + searchingLogin);
+        Client searchingClient = clientService.getClientByLogin(searchingLogin);
+
+        LOGGER.info("Searched client: "+ searchingClient);
+
+        if (searchingClient == null) {
+
             return new SearchResponse(2, "can't find user with such login");
-        }
-        currentClient = clientService.getClientByLogin(searchMessage.getSearchLogin());
-        if (currentClient.getClientToken() == 0) {
+        } else if ((new Date().getTime() - currentClient.getLastLogin().getTime()) > (TimeConstant.LIFETIME)) {
+
+            return new SearchResponse(3, "you've been logged out");
+        } else if (searchingClient.getClientToken() == 0) {
+
             return new SearchResponse(1, "user offline");
+        } else {
+
+            return new SearchResponse(0, "" + currentClient.getClientIp());
         }
-        System.out.println(new SearchResponse(0, "" + currentClient.getClientIp()).toString());
-        return new SearchResponse(0, "" + currentClient.getClientIp());
     }
 
     public ChecksumFromResponse checksumFrom(ChecksumMessage checksumMessage) {

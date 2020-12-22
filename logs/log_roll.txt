@@ -38,3 +38,63 @@
 2020:-12-22 01:50:29 [Thread-1] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Got a request from client{"login":"Dima","password":2130200}
 2020:-12-22 01:50:29 [Thread-1] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Tue Dec 22 01:50:29 MSK 2020
 2020:-12-22 01:50:29 [Thread-1] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Writing response: {"code":"0","logInDescription":authentication and token set is successful}
+2020:-12-22 02:34:40 [main] INFO  com.solvd.automation.lab.fall.main.Server - Launching server
+2020:-12-22 02:35:18 [main] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Created Client handler
+2020:-12-22 02:35:18 [Thread-1] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Started listener for client handler
+2020:-12-22 02:35:31 [Thread-1] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Got a request from client{"regLogin":"Anna","regPassword":2045663}
+2020:-12-22 02:35:32 [Thread-1] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Writing response: {"code":"0","regDescription":successful registration}
+2020:-12-22 02:35:51 [Thread-1] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Got a request from client{"login":"Dima","password":2130200}
+2020:-12-22 02:35:51 [Thread-1] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Tue Dec 22 02:35:52 MSK 2020
+2020:-12-22 02:35:51 [Thread-1] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Writing response: {"code":"0","logInDescription":authentication and token set is successful}
+2020:-12-22 02:38:40 [Thread-1] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Got a request from client{"contactLogin":"Anna"}
+2020:-12-22 02:38:40 [Thread-1] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Writing response: {"code":"0","connection":127.0.0.1:54162}
+2020:-12-22 02:43:50 [Thread-1] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Got a request from client{"contactLogin":"aEnter your friend's login"}
+2020:-12-22 02:44:43 [main] INFO  com.solvd.automation.lab.fall.main.Server - Launching server
+2020:-12-22 02:44:46 [main] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Created Client handler
+2020:-12-22 02:44:46 [Thread-1] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Started listener for client handler
+2020:-12-22 02:44:55 [Thread-1] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Got a request from client{"login":"Anna","password":2045663}
+2020:-12-22 02:44:55 [Thread-1] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Tue Dec 22 02:44:56 MSK 2020
+2020:-12-22 02:44:55 [Thread-1] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Writing response: {"code":"0","logInDescription":authentication and token set is successful}
+2020:-12-22 02:45:03 [main] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Created Client handler
+2020:-12-22 02:45:03 [Thread-3] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Started listener for client handler
+2020:-12-22 02:45:08 [Thread-3] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Got a request from client{"login":"Anna","password":-806358739}
+2020:-12-22 02:45:08 [Thread-3] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Writing response: {"code":"1","logInDescription":wrong password}
+2020:-12-22 02:45:12 [Thread-3] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Got a request from client{"login":"Annssa","password":-806358739}
+2020:-12-22 02:45:12 [Thread-3] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Writing response: {"code":"2","logInDescription":client was not found}
+2020:-12-22 02:45:29 [Thread-3] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Got a request from client{"regLogin":"Anna","regPassword":1599}
+2020:-12-22 02:45:29 [Thread-3] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Writing response: {"code":"1","regDescription":client already exists!}
+2020:-12-22 02:45:43 [Thread-3] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Got a request from client{"login":"Dima","password":3231}
+2020:-12-22 02:45:43 [Thread-3] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Writing response: {"code":"1","logInDescription":wrong password}
+2020:-12-22 02:45:46 [Thread-3] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Got a request from client{"login":"Dima","password":2130200}
+2020:-12-22 02:45:46 [Thread-3] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Tue Dec 22 02:45:47 MSK 2020
+2020:-12-22 02:45:46 [Thread-3] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Writing response: {"code":"0","logInDescription":authentication and token set is successful}
+2020:-12-22 02:45:52 [Thread-3] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Got a request from client{"contactLogin":"Enter your friend's login"}
+2020:-12-22 02:48:06 [main] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Created Client handler
+2020:-12-22 02:48:06 [Thread-5] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Started listener for client handler
+2020:-12-22 02:48:06 [Thread-5] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Got a request from client{"login":"Dima","password":2130200}
+2020:-12-22 02:48:06 [Thread-5] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Tue Dec 22 02:48:07 MSK 2020
+2020:-12-22 02:48:06 [Thread-5] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Writing response: {"code":"0","logInDescription":authentication and token set is successful}
+2020:-12-22 02:48:30 [main] INFO  com.solvd.automation.lab.fall.main.Server - Launching server
+2020:-12-22 02:48:40 [main] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Created Client handler
+2020:-12-22 02:48:40 [Thread-1] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Started listener for client handler
+2020:-12-22 02:48:45 [Thread-1] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Got a request from client{"login":"Dima","password":2130200}
+2020:-12-22 02:48:55 [Thread-1] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Tue Dec 22 02:48:55 MSK 2020
+2020:-12-22 02:49:01 [Thread-1] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Writing response: {"code":"0","logInDescription":authentication and token set is successful}
+2020:-12-22 02:49:26 [Thread-1] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Got a request from client{"contactLogin":"Danila"}
+2020:-12-22 02:51:09 [main] INFO  com.solvd.automation.lab.fall.main.Server - Launching server
+2020:-12-22 02:51:17 [main] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Created Client handler
+2020:-12-22 02:51:17 [Thread-1] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Started listener for client handler
+2020:-12-22 02:51:22 [Thread-1] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Got a request from client{"login":"Dima","password":2130200}
+2020:-12-22 02:51:27 [Thread-1] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Tue Dec 22 02:51:28 MSK 2020
+2020:-12-22 02:51:33 [Thread-1] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Writing response: {"code":"0","logInDescription":authentication and token set is successful}
+2020:-12-22 02:51:47 [Thread-1] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Got a request from client{"contactLogin":"Danila"}
+2020:-12-22 03:02:15 [main] INFO  com.solvd.automation.lab.fall.main.Server - Launching server
+2020:-12-22 03:02:29 [main] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Created Client handler
+2020:-12-22 03:02:30 [Thread-1] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Started listener for client handler
+2020:-12-22 03:02:36 [Thread-1] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Got a request from client{"login":"Dima","password":2130200}
+2020:-12-22 03:02:41 [Thread-1] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Tue Dec 22 03:02:41 MSK 2020
+2020:-12-22 03:02:43 [Thread-1] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Writing response: {"code":"0","logInDescription":authentication and token set is successful}
+2020:-12-22 03:02:54 [Thread-1] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Got a request from client{"contactLogin":"Ivan"}
+2020:-12-22 03:04:01 [Thread-1] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Searching forIvan
+2020:-12-22 03:04:22 [Thread-1] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Searched client: null
+2020:-12-22 03:04:47 [Thread-1] INFO  com.solvd.automation.lab.fall.model.ClientHandler - Writing response: {"code":"2","connection":can't find user with such login}
