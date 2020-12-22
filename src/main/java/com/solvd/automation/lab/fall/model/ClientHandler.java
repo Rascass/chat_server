@@ -37,37 +37,63 @@ public class ClientHandler implements Runnable {
     }
 
     public LogInResponse authenticate(LogInMessage logInMessage) {
-        int token = (1 + (int) (Math.random() * 100000));
+
         ClientService clientService = new ClientService();
-        if (clientService.getClientByLogin(logInMessage.getLogin()) == null) {
+
+        Client logInClient = clientService.getClientByLogin(logInMessage.getLogin());
+
+        if (logInClient == null) {
+
             return new LogInResponse(2, "client was not found");
-        }
-        currentClient = clientService.getClientByLogin(logInMessage.getLogin());
-        if (currentClient.getPasswordHash() != logInMessage.getPasswordHash()) {
+
+        } else if (logInClient.getPasswordHash() != logInMessage.getPasswordHash()) {
+
             return new LogInResponse(1, "wrong password");
+
+        } else {
+            currentClient = logInClient;
+            this.setUpClient(currentClient);
+
+            clientService.updateClient(currentClient);
+            LOGGER.info(clientService.getClientByLogin(logInMessage.getLogin()).getLastLogin());
+
+            return new LogInResponse(0, "authentication and token set is successful");
         }
-        currentClient.setClientToken(token);
-        currentClient.setClientIp(socketConnector.getIp());
-        currentClient.setLastLogin(new Date());
-        System.out.println(currentClient.getLastLogin());
-        clientService.updateClient(currentClient);
 
-        LOGGER.info(clientService.getClientByLogin(logInMessage.getLogin()).getLastLogin());
 
-        return new LogInResponse(0, "authentication and token set is successful");
+    }
+
+    private void setUpClient(Client client) {
+
+        int token = (1 + (int) (Math.random() * 100000));
+        client.setClientToken(token);
+
+        client.setClientIp(socketConnector.getIp());
+        client.setLastLogin(new Date());
+
+        LOGGER.info("Client's address: " + currentClient.getLastLogin());
     }
 
     public RegistrationResponse registration(RegistrationMessage registrationMessage) {
-        int token = (1 + (int) (Math.random() * 100000));
+
         ClientService clientService = new ClientService();
-        if (clientService.getClientByLogin(registrationMessage.getLogin()) != null) {
+
+        Client clientToRegister = clientService.getClientByLogin(registrationMessage.getLogin());
+
+        if (clientToRegister != null) {
             return new RegistrationResponse(1, "client already exists!");
+        } else {
+
+            int clientCounter = clientService.getLastClientId();
+            Client.setCounter(clientCounter);
+
+            Client RegisterClient = new Client(null, null, 0, registrationMessage.getLogin(),
+                    registrationMessage.getRegPassword(), null);
+
+            clientService.createClient(RegisterClient);
+
+            return new RegistrationResponse(0, "successful registration");
         }
-        int clientCounter = clientService.getLastClientId();
-        Client.setCounter(clientCounter);
-        currentClient = new Client(socketConnector.getIp(), new Date(), token, registrationMessage.getLogin(), registrationMessage.getRegPassword(), null);
-        clientService.createClient(currentClient);
-        return new RegistrationResponse(0, "successful registration");
     }
 
     public SearchResponse findClient(SearchMessage searchMessage) {
@@ -78,17 +104,20 @@ public class ClientHandler implements Runnable {
         LOGGER.info("Searching for " + searchingLogin);
         Client searchingClient = clientService.getClientByLogin(searchingLogin);
 
-        LOGGER.info("Searched client: "+ searchingClient);
+        LOGGER.info("Searched client: " + searchingClient);
 
         if (searchingClient == null) {
 
             return new SearchResponse(2, "can't find user with such login");
+
         } else if ((new Date().getTime() - currentClient.getLastLogin().getTime()) > (TimeConstant.LIFETIME)) {
 
             return new SearchResponse(3, "you've been logged out");
+
         } else if (searchingClient.getClientToken() == 0) {
 
             return new SearchResponse(1, "user offline");
+
         } else {
 
             return new SearchResponse(0, "" + currentClient.getClientIp());
@@ -97,7 +126,9 @@ public class ClientHandler implements Runnable {
 
     public ChecksumFromResponse checksumFrom(ChecksumMessage checksumMessage) {
         ClientService clientService = new ClientService();
-        Client currentClient = clientService.getClientByLogin(checksumMessage.getLoginOfSender());
+
+        Client clientSender = clientService.getClientByLogin(checksumMessage.getLoginOfSender());
+
         return new ChecksumFromResponse(0, "checksum to "
                 + checksumMessage.getLoginOfRecipient() + " was sent");
 
@@ -108,12 +139,19 @@ public class ClientHandler implements Runnable {
         for (ClientHandler c : Server.clientHandlers) {
 
             if (c.currentClient.getLogin().equals(checksumMessage.getLoginOfRecipient())) {
-                c.socketConnector.writeLine(new ChecksumToResponse(0, "checksum from " +
-                        checksumMessage.getLoginOfSender() + " ", checksumMessage.getChecksum()).toString());
+
+                String response = new ChecksumToResponse(0, "checksum from " +
+                        checksumMessage.getLoginOfSender() + " ", checksumMessage.getChecksum()).toString();
+
+                LOGGER.info("ChecksumTo for existing user: " + response);
+
+                c.socketConnector.writeLine(response);
+
                 return checksumFrom(checksumMessage);
             }
         }
-        return new ChecksumFromResponse(1, "Your checksum was not sent. User fos not found");
+
+        return new ChecksumFromResponse(1, "Your checksum was not sent. User was not found");
     }
 
     private class ClientListener implements Runnable {
