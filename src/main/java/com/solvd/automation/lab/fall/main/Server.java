@@ -29,9 +29,8 @@ public class Server {
                 clientHandlers.add(clientHandler);
                 Thread thread = new Thread(clientHandler);
                 thread.start();
-                thread.join();
             }
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException e) {
             throw new RuntimeException();
         }
     }

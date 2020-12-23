@@ -21,7 +21,6 @@ public class ClientHandler implements Runnable {
 
     private Client currentClient;
     private final SocketConnector socketConnector;
-    private volatile Date tokenDate;
     private final MyParser parser;
 
     public ClientHandler(SocketConnector socketConnector) {
@@ -82,7 +81,7 @@ public class ClientHandler implements Runnable {
     }
 
     public boolean isOnline(Client client) {
-        return (new Date().getTime() - client.getLastLogin().getTime()) > (TimeConstant.LIFETIME);
+        return (new Date().getTime() - client.getLastLogin().getTime()) < (TimeConstant.LIFETIME);
     }
 
     public IResponse findClient(SearchMessage searchMessage) {
@@ -117,7 +116,10 @@ public class ClientHandler implements Runnable {
             return new ChecksumToResponse(3, "you've been logged out", 0);
         }
         for (ClientHandler c : Server.clientHandlers) {
+            System.out.print(c.currentClient.getLogin() + "     ");
+            System.out.println(checksumMessage.getLoginOfRecipient());
             if (c.currentClient.getLogin().equals(checksumMessage.getLoginOfRecipient())) {
+
                 if (!isOnline(c.currentClient)) {
                     return new ChecksumToResponse(3, "you've been logged out", 0);
                 }
