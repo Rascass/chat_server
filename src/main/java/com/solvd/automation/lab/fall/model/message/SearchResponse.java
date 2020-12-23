@@ -37,6 +37,6 @@ public class SearchResponse implements IResponse {
 
     @Override
     public String toString() {
-        return "{\"code\":\""+code+"\",\"connection\":" + connection + ",\"login\":" + login + '}';
+        return "{\"code\":\""+code+"\",\"connection\":" + connection + ",\"login\":" + login + "}";
     }
 }

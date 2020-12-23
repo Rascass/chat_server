@@ -138,9 +138,10 @@ public class ClientHandler implements Runnable {
             String request;
             while ((request = socketConnector.readLine()) != null) {
                 if (request.equals("Client disconnected!")) {
-                    break;                }
+                    break;
+                }
                 LOGGER.info("Got a request from client" + request);
-                IMessage response = null; // da da, eto null. Prostite
+                IMessage response = null;
                 try {
                     response = parser.getResponse(request);
                 } catch (UnknownRequestType ex) {
