@@ -10,7 +10,7 @@ public enum Pattern {
     LOGINPATTERN("(\\{\"login\":)\"[a-zA-Z0-9]+\"(,\"password\":)[-]?[0-9]+\\}", new LogInParser()),
     REGISTRATIONPATTERN("(\\{\"regLogin\":)\"[a-zA-Z0-9]+\"(,\"regPassword\":)[-]?[0-9]+\\}", new RegistrationParser()),
     SEARCHPATTERN("(\\{\"contactLogin\":)\"[a-zA-Z0-9]+\"\\}", new SearchParser()),
-    CHECKSUM("{\"loginFrom\":\"[a-zA-Z0-9]+\",\"loginTo\":\"[a-zA-Z0-9]+\",\"checksum\":\\d+}", new ChecksumParser());
+    CHECKSUM("\\{\"loginFrom\":\"[a-zA-Z0-9]+\",\"loginTo\":\"[a-zA-Z0-9]+\",\"checksum\":\\d+}", new ChecksumParser());
 
     private String patternName;
     private Parser parser;
