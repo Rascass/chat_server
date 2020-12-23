@@ -34,105 +34,93 @@ public class ClientHandler implements Runnable {
     public void run() {
         Thread thread = new Thread(new ClientListener());
         thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public IResponse authenticate(LogInMessage logInMessage) {
 
         ClientService clientService = new ClientService();
-
         Client logInClient = clientService.getClientByLogin(logInMessage.getLogin());
-
         if (logInClient == null) {
-
-            return new LogInResponse(2, "client was not found");
-
+            return new LogInResponse(2, "client was not found", "null");
         } else if (logInClient.getPasswordHash() != logInMessage.getPasswordHash()) {
-
-            return new LogInResponse(1, "wrong password");
-
+            return new LogInResponse(1, "wrong password", "null");
         } else {
             currentClient = logInClient;
             this.setUpClient(currentClient);
-
             clientService.updateClient(currentClient);
             LOGGER.info(clientService.getClientByLogin(logInMessage.getLogin()).getLastLogin());
-
-            return new LogInResponse(0, "authentication and token set is successful");
+            return new LogInResponse(0, "authentication and token set is successful", currentClient.getLogin());
         }
-
-
     }
 
     private void setUpClient(Client client) {
-
         int token = (1 + (int) (Math.random() * 100000));
         client.setClientToken(token);
-
         client.setClientIp(socketConnector.getIp());
         client.setLastLogin(new Date());
-
         LOGGER.info("Client's address: " + currentClient.getLastLogin());
     }
 
     public IResponse registration(RegistrationMessage registrationMessage) {
-
         ClientService clientService = new ClientService();
-
         Client clientToRegister = clientService.getClientByLogin(registrationMessage.getLogin());
-
         if (clientToRegister != null) {
             return new RegistrationResponse(1, "client already exists!");
         } else {
-
             int clientCounter = clientService.getLastClientId();
             Client.setCounter(clientCounter);
-
             Client RegisterClient = new Client(null, null, 0, registrationMessage.getLogin(),
                     registrationMessage.getRegPassword(), null);
-
             clientService.createClient(RegisterClient);
-
             return new RegistrationResponse(0, "successful registration");
         }
     }
 
+    public boolean isOnline(Client client) {
+        return (new Date().getTime() - client.getLastLogin().getTime()) > (TimeConstant.LIFETIME);
+    }
 
     public IResponse findClient(SearchMessage searchMessage) {
-
         ClientService clientService = new ClientService();
         String searchingLogin = searchMessage.getSearchLogin();
         LOGGER.info("Searching for " + searchingLogin);
         Client searchingClient = clientService.getClientByLogin(searchingLogin);
         LOGGER.info("Searched client: " + searchingClient);
-        if (searchingClient == null) {
-            return new SearchResponse(2, "can't find user with such login");
-        } else if ((new Date().getTime() - currentClient.getLastLogin().getTime()) > (TimeConstant.LIFETIME)) {
-            return new SearchResponse(3, "you've been logged out");
-        } else if (searchingClient.getClientToken() == 0) {
-            return new SearchResponse(1, "user offline");
-        } else {
-            return new SearchResponse(0, "" + searchingClient.getClientIp());
+        if (!isOnline(currentClient)) {
+            return new SearchResponse(3, "you've been logged out", "null");
         }
+        if (searchingClient == null) {
+            return new SearchResponse(2, "can't find user with such login", "null");
+        }
+        if (searchingClient.getClientToken() == 0) {
+            return new SearchResponse(1, "user is not authenticated", searchingClient.getLogin());
+        }
+        if (!isOnline(searchingClient)) {
+            return new SearchResponse(3, "user have been logged out", searchingClient.getLogin());
+        }
+        return new SearchResponse(0, searchingClient.getClientIp(), searchingClient.getLogin());
     }
 
     public IResponse checksumFrom(ChecksumMessage checksumMessage) {
-        ClientService clientService = new ClientService();
-
-        Client clientSender = clientService.getClientByLogin(checksumMessage.getLoginOfSender());
-        if ((new Date().getTime() - clientSender.getLastLogin().getTime()) > (TimeConstant.LIFETIME)) {
-            return new ChecksumFromResponse(3, "you've been logged out");
-        }
         return new ChecksumFromResponse(0, "checksum to "
                 + checksumMessage.getLoginOfRecipient() + " was sent");
     }
 
 
     public IResponse checksumTo(ChecksumMessage checksumMessage) {
+        if (!isOnline(currentClient)) {
+            return new ChecksumToResponse(3, "you've been logged out", 0);
+        }
         for (ClientHandler c : Server.clientHandlers) {
-            if ((new Date().getTime() - currentClient.getLastLogin().getTime()) > (TimeConstant.LIFETIME)) {
-                return new ChecksumToResponse(3, "you've been logged out", 0);
-            }
             if (c.currentClient.getLogin().equals(checksumMessage.getLoginOfRecipient())) {
+                if (!isOnline(c.currentClient)) {
+                    return new ChecksumToResponse(3, "you've been logged out", 0);
+                }
                 String response = new ChecksumToResponse(0, "checksum from " +
                         checksumMessage.getLoginOfSender() + " ", checksumMessage.getChecksum()).toString();
                 LOGGER.info("ChecksumTo for existing user: " + response);
@@ -140,34 +128,27 @@ public class ClientHandler implements Runnable {
                 return checksumFrom(checksumMessage);
             }
         }
-
         return new ChecksumFromResponse(1, "Your checksum was not sent. User was not found");
     }
 
     private class ClientListener implements Runnable {
-
         @Override
         public void run() {
-
             LOGGER.info("Started listener for client handler");
             String request;
-
             while ((request = socketConnector.readLine()) != null) {
-
+                if (request.equals("Client disconnected!")) {
+                    break;                }
                 LOGGER.info("Got a request from client" + request);
-
                 IMessage response = null; // da da, eto null. Prostite
-
                 try {
                     response = parser.getResponse(request);
                 } catch (UnknownRequestType ex) {
                     ex.printStackTrace();
                 }
-
                 LOGGER.info("Writing response: " + response.toString());
                 socketConnector.writeLine(response.toString());
             }
-
         }
     }
 
