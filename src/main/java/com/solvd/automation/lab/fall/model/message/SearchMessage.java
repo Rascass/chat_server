@@ -1,22 +1,23 @@
 package com.solvd.automation.lab.fall.model.message;
 
-public class SearchMessage {
-    String login;
+public class SearchMessage implements AbstractRequest {
+    String searchLogin;
 
-    public SearchMessage(String login) {
-        this.login = login;
+    public SearchMessage(String searchLogin) {
+        this.searchLogin = searchLogin;
     }
 
-    public String getLogin() {
-        return login;
+    public String getSearchLogin() {
+        return searchLogin;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setSearchLogin(String searchLogin) {
+        this.searchLogin = searchLogin;
     }
 
     @Override
     public String toString() {
-        return "{\"login\":\""+login+"\"}";
+        return "{\"contactLogin\":\""+ searchLogin +"\"}";
     }
+    //{"searchLogin":"searchLogin"}
 }

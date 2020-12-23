@@ -4,6 +4,8 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import static com.solvd.automation.lab.fall.config.SessionFactory.LOGGER;
+
 public class SocketConnector implements Closeable {
     private final Socket socket;
     private final BufferedReader reader;
@@ -33,8 +35,14 @@ public class SocketConnector implements Closeable {
         try {
             return reader.readLine();
         } catch (IOException e) {
-            throw new RuntimeException();
+            LOGGER.info("Client disconnected!");
+            return "Client disconnected!";
         }
+    }
+
+    public String getIp () {
+        String result = socket.getRemoteSocketAddress().toString();
+        return result.substring(1);
     }
 
     private BufferedReader createReader() {
@@ -58,5 +66,9 @@ public class SocketConnector implements Closeable {
         writer.close();
         reader.close();
         socket.close();
+    }
+
+    public BufferedReader getReader() {
+        return reader;
     }
 }

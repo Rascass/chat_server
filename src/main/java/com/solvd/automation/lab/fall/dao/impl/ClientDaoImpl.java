@@ -13,6 +13,7 @@ import java.util.List;
 public class ClientDaoImpl implements ClientDao {
 
     private String namespace = "clients_mapper";
+
     @Override
     public void create(Client client) {
         SqlSession sqlSession = SessionFactory.getSession();
@@ -59,6 +60,7 @@ public class ClientDaoImpl implements ClientDao {
         sqlSession.commit();
         sqlSession.close();
     }
+
     public int getLastClientId() {
         SqlSession sqlSession = SessionFactory.getSession();
         List<AbstractModel> values = sqlSession.selectList(namespace + ".get");
@@ -70,6 +72,7 @@ public class ClientDaoImpl implements ClientDao {
         sqlSession.close();
         return id;
     }
+
     public Client getByLoginAndHash(LogInMessage logInMessage) {
         SqlSession sqlSession = SessionFactory.getSession();
         Client client = sqlSession.selectOne(namespace + ".getByLoginAndHash", logInMessage);
