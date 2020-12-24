@@ -116,8 +116,6 @@ public class ClientHandler implements Runnable {
             return new ChecksumToResponse(3, "you've been logged out", 0);
         }
         for (ClientHandler c : Server.clientHandlers) {
-            System.out.print(c.currentClient.getLogin() + "     ");
-            System.out.println(checksumMessage.getLoginOfRecipient());
             if (c.currentClient.getLogin().equals(checksumMessage.getLoginOfRecipient())) {
 
                 if (!isOnline(c.currentClient)) {
@@ -140,6 +138,7 @@ public class ClientHandler implements Runnable {
             String request;
             while ((request = socketConnector.readLine()) != null) {
                 if (request.equals("Client disconnected!")) {
+                    Server.clientHandlers.remove(ClientHandler.this);
                     break;
                 }
                 LOGGER.info("Got a request from client" + request);
